@@ -11,6 +11,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
 </head>
 <body>
 <h1>FLIGHT-INFO</h1>
@@ -28,20 +32,23 @@
     <input type="number" id="longmax" name="longmax" step="0.01" placeholder="24.10">
     <button type="submit">Szukaj</button>
 </form>
-<div id="results">
-    <div id="callsign"></div>
-    <div id="originCountry"></div>
-    <div id="longtitude"></div>
-    <div id="latitude"></div>
-    <div id="baroAltitude"></div>
-    <div id="onGround"></div>
-    <div id="velocity"></div>
-    <div id="trueTrack"></div>
-    <div id="timePosition"></div>
-    <div id="lastContact"></div>
-</div>
-
 <div id="map"></div>
+
+<table id="flightsTable">
+    <thead>
+      <tr>
+        <th>Callsign</th>
+        <th>Origin Country</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Velocity</th>
+        <th>Altitude</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  
+
 
 <div>The OpenSky Network, https://opensky-network.org</div>
 

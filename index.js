@@ -66,6 +66,16 @@ async function searchByCountry(lamin, lamax, longmin, longmax) {
     });
 
     createMap(lat, long, coordinates); // Wywołanie mapy z współrzędnymi
+
+    console.log(getTopThreeVelocity(filteredFlights));
+    console.log(getTopThreeBaroAltitude(filteredFlights));
+
+
+    renderTable(filteredFlights);
+    $(document).ready(function() {
+        $('#flightsTable').DataTable();
+    });
+
 }
 
 
@@ -78,7 +88,24 @@ function avg(lamin, lamax, longmin, longmax) {
     return {lat, long};
 }
 
-// create map
+function renderTable(data) {
+    const tableBody = document.querySelector('#flightsTable tbody');
+    tableBody.innerHTML = '';
+
+    data.forEach(flight => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${flight.callsign}</td>
+            <td>${flight.originCountry}</td>
+            <td>${flight.latitude}</td>
+            <td>${flight.longtitude}</td>
+            <td>${flight.velocity}</td>
+            <td>${flight.baroAltitude}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+// render map
 function createMap(lat, long, coordinates) {
     let map = L.map('map').setView([lat, long], 5);
 
@@ -93,7 +120,17 @@ function createMap(lat, long, coordinates) {
 
 }
 
+function getTopThreeVelocity(arr) {
+    return arr
+        .sort((a,b) => b.velocity - a.velocity)
+        .slice(0, 3);
+}
 
+function getTopThreeBaroAltitude(arr) {
+    return arr
+        .sort((a,b) => b.baroAltitude - a.baroAltitude)
+        .slice(0, 3);
+}
 
 
 getFlightInfo();
@@ -103,7 +140,8 @@ getFlightInfo();
     // Change: originCountry !== lat, long.       DONE
     // Think of a way to change lat/long input
     // Create tab onMapPoint click() that shows informations
+    // Add TOP3 ranking: 1)Velocity 2) Altitude etc....  DONE
+    // DIsplay TOP3 
 // Display data in a pleasant way (flight-info + mark on a map)
 // Handle styling
-
 
