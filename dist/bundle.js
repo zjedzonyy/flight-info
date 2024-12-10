@@ -1,0 +1,32 @@
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/***/ (() => {
+
+eval("// Matthias Schäfer, Martin Strohmeier, Vincent Lenders, Ivan Martinovic and Matthias Wilhelm.\n// \"Bringing Up OpenSky: A Large-scale ADS-B Sensor Network for Research\".\n// In Proceedings of the 13th IEEE/ACM International Symposium on Information Processing in Sensor Networks (IPSN), pages 83-94, April 2014.\n\n\nconst url = `https://opensky-network.org/api`;\n\n// take data from form and perform API query\nfunction getFlightInfo() {\n    document.getElementById('country-form').addEventListener('submit', (event) => {\n        event.preventDefault();\n        // const country = document.getElementById('country').value.trim().toLowerCase();\n        const lamin = parseFloat(document.getElementById('lamin').value);\n        const lamax = parseFloat(document.getElementById('lamax').value);\n        const longmin = parseFloat(document.getElementById('longmin').value);\n        const longmax = parseFloat(document.getElementById('longmax').value);\n\n        searchByCountry(lamin, lamax, longmin, longmax);\n        hideTable();\n\n    });\n}\n\nfunction hideTable() {\n        //show table\n        const table = document.getElementById('flightsTable');\n        if (table.hidden = true) {\n            table.hidden = false;\n        } else if (table.hidden = false) {\n            table.hidden = true;\n        }\n}\n\n// receive all flights info\nasync function coverCountry(lamin, lamax, longmin, longmax) {\n    let response = await fetch(`https://opensky-network.org/api/states/all?lamin=${lamin}&lomin=${longmin}&lamax=${lamax}&lomax=${longmax}`);\n    let data = await response.json();\n\n    // console.log(data);\n    return data;\n}\n\n// get valuable informations about flights\nasync function displayData(lamin, lamax, longmin, longmax) {\n    let data = await coverCountry(lamin, lamax, longmin, longmax);\n    let timestamp = await data.time;\n    let date = new Date(timestamp * 1000);\n\n    let filteredFlights = data.states.map(flight => {\n        return {\n            callsign: flight[1],\n            originCountry: flight[2],\n            longtitude: flight[5],\n            latitude: flight[6],\n            baroAltitude: flight[7],\n            onGround: flight[8],\n            velocity: flight[9],\n            trueTrack: flight[10],\n            timePosition: flight[3],\n            lastContact: flight[4]\n        };\n    });\n    // console.log(date);\n    return {filteredFlights, date};\n}\n// show flights by Country\nasync function searchByCountry(lamin, lamax, longmin, longmax) {\n    // Wywołanie displayData raz, wynik jest przechowywany w zmiennej data\n    let { filteredFlights, date } = await displayData(lamin, lamax, longmin, longmax);\n    \n    let coordinates = [];\n    let {lat, long} = avg(lamin, lamax, longmin, longmax);\n    // Zbieranie współrzędnych z filteredFlights\n    filteredFlights.map(flight => {\n        coordinates.push([flight[\"latitude\"], flight[\"longtitude\"]]);\n    });\n\n    createMap(lat, long, coordinates); // Wywołanie mapy z współrzędnymi\n\n    console.log(getTopThreeVelocity(filteredFlights));\n    console.log(getTopThreeBaroAltitude(filteredFlights));\n\n\n    renderTable(filteredFlights);\n    $(document).ready(function() {\n        $('#flightsTable').DataTable();\n    });\n\n}\n\n\n// calculate avg coordinates \nfunction avg(lamin, lamax, longmin, longmax) {\n    console.log(lamin, lamax, longmin, longmax);\n    lat = (lamin + lamax) / 2;\n    long = (longmin + longmax) / 2;\n\n    return {lat, long};\n}\n\nfunction renderTable(data) {\n    const tableBody = document.querySelector('#flightsTable tbody');\n    tableBody.innerHTML = '';\n\n    data.forEach(flight => {\n        const row = document.createElement('tr');\n        row.innerHTML = `\n            <td>${flight.callsign}</td>\n            <td>${flight.originCountry}</td>\n            <td>${flight.latitude}</td>\n            <td>${flight.longtitude}</td>\n            <td>${flight.velocity}</td>\n            <td>${flight.baroAltitude}</td>\n        `;\n        tableBody.appendChild(row);\n    });\n}\n// render map\nfunction createMap(lat, long, coordinates) {\n    let map = L.map('map').setView([lat, long], 5);\n\n    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);\n\n    coordinates.forEach(coordinate => {\n        L.marker(coordinate).addTo(map)\n        .bindPopup(`Marker na współrzędnych ${coordinate}`)\n        .openPopup();\n    });\n\n\n}\n\nfunction getTopThreeVelocity(arr) {\n    return arr\n        .sort((a,b) => b.velocity - a.velocity)\n        .slice(0, 3);\n}\n\nfunction getTopThreeBaroAltitude(arr) {\n    return arr\n        .sort((a,b) => b.baroAltitude - a.baroAltitude)\n        .slice(0, 3);\n}\n\n\n\ngetFlightInfo();\n\n// Refactor code to get it clean\n    // searchByCountry() - handle double await together ()\n    // Change: originCountry !== lat, long.       DONE\n    // Think of a way to change lat/long input\n    // Create tab onMapPoint click() that shows informations\n    // Add TOP3 ranking: 1)Velocity 2) Altitude etc....  DONE\n    // DIsplay TOP3 \n// Display data in a pleasant way (flight-info + mark on a map)\n// Handle styling\n\n\n\n//# sourceURL=webpack://flight-info/./src/index.js?");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = {};
+/******/ 	__webpack_modules__["./src/index.js"]();
+/******/ 	
+/******/ })()
+;
