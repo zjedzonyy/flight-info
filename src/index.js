@@ -2,6 +2,7 @@
 // "Bringing Up OpenSky: A Large-scale ADS-B Sensor Network for Research".
 // In Proceedings of the 13th IEEE/ACM International Symposium on Information Processing in Sensor Networks (IPSN), pages 83-94, April 2014.
 import './style.css';
+import 'modern-normalize';
 
 
 const url = `https://opensky-network.org/api`;

@@ -15,21 +15,17 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: var(--text-secondary);
+    background-color: var(--secondary-color);
     color: var(--text-primary);
   }
 
-#map {
-    height: 300px;
-    width: 600px;
-}
 
 #container {
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-rows: 5rem 1fr 2fr 5rem;
-    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 5rem 2fr 2fr 5rem;
+    grid-template-columns: 3fr 4fr;
 }
 
 header {
@@ -43,11 +39,74 @@ header {
 #country-form {
     grid-row: 2 / 3;  
     grid-column: 1 / 2;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    flex-direction: column;
+    padding: 1rem;
 }
 
+#country-form label {
+    display: flex;
+}
+
+#country-form div {
+    padding: 0.5rem;
+}
+
+/* CSS */
+.button-60 {
+  align-items: center;
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: .375em;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #363636;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 1rem;
+  height: 2.5em;
+  justify-content: flex-start;
+  line-height: 1.5;
+  padding: calc(.5em - 1px) 1em;
+  position: relative;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.button-60:active {
+  border-color: #4a4a4a;
+  outline: 0;
+}
+
+.button-60:focus {
+  border-color: #485fc7;
+  outline: 0;
+}
+
+.button-60:hover {
+  border-color: #b5b5b5;
+}
+
+.button-60:focus:not(:active) {
+  box-shadow: rgba(72, 95, 199, .25) 0 0 0 .125em;
+}
 #map {
     grid-row: 2 / 3;
     grid-column: 2 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 35rem;
+    height: 20rem;
+    margin: 1rem;
 }
 
 #table {
@@ -58,10 +117,20 @@ header {
     grid-column: 1 / 3;
 }
 
+#flightsTable,
+#flitghtsTable td {
+    color: var(--text-secondary);
+}
+
+#flightsTable th {
+    color: var(--text-primary);
+}
+
 footer {
     display: flex;
     grid-row: 4 / 5;
     grid-column: 1 / 3;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
