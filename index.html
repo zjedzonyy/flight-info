@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html long="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,8 +16,16 @@
 <h1>FLIGHT-INFO</h1>
 
 <form id="country-form">
-    <label for="country">Podaj kraj:</label>
-    <input type="text" id="country" name="country" placeholder="Poland">
+    <!-- <label for="country">Podaj kraj:</label>
+    <input type="text" id="country" name="country" placeholder="Poland"> -->
+    <label for="lamin">Min latitude</label>
+    <input type="number" id="lamin" name="lamin" step="0.01" placeholder="49.00">
+    <label for="lamax">Max latitude</label>
+    <input type="number" id="lamax" name="lamax" step="0.01" placeholder="54.90">
+    <label for="longmin">Min longtitude</label>
+    <input type="number" id="longmin" name="longmin" step="0.01" placeholder="14.10">
+    <label for="longmax">Max longtitude</label>
+    <input type="number" id="longmax" name="longmax" step="0.01" placeholder="24.10">
     <button type="submit">Szukaj</button>
 </form>
 <div id="results">

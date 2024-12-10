@@ -9,17 +9,21 @@ const url = `https://opensky-network.org/api`;
 function getFlightInfo() {
     document.getElementById('country-form').addEventListener('submit', (event) => {
         event.preventDefault();
-        const country = document.getElementById('country').value.trim().toLowerCase();
-    
-        searchByCountry(country);
+        // const country = document.getElementById('country').value.trim().toLowerCase();
+        const lamin = parseFloat(document.getElementById('lamin').value);
+        const lamax = parseFloat(document.getElementById('lamax').value);
+        const longmin = parseFloat(document.getElementById('longmin').value);
+        const longmax = parseFloat(document.getElementById('longmax').value);
+
+        searchByCountry(lamin, lamax, longmin, longmax);
     });
 }
 
 
 
 // receive all flights info
-async function coverCountry() {
-    let response = await fetch(`https://opensky-network.org/api/states/all?lamin=35.8389&lomin=2.9962&lamax=67.8229&lomax=25.5226`);
+async function coverCountry(lamin, lamax, longmin, longmax) {
+    let response = await fetch(`https://opensky-network.org/api/states/all?lamin=${lamin}&lomin=${longmin}&lamax=${lamax}&lomax=${longmax}`);
     let data = await response.json();
 
     // console.log(data);
@@ -27,8 +31,8 @@ async function coverCountry() {
 }
 
 // get valuable informations about flights
-async function displayData() {
-    let data = await coverCountry();
+async function displayData(lamin, lamax, longmin, longmax) {
+    let data = await coverCountry(lamin, lamax, longmin, longmax);
     let timestamp = await data.time;
     let date = new Date(timestamp * 1000);
 
@@ -47,44 +51,40 @@ async function displayData() {
         };
     });
     // console.log(date);
-    console.log(filteredFlights);
-
     return {filteredFlights, date};
 }
-displayData()
 // show flights by Country
-async function searchByCountry(country) {
-    let date = (await displayData()).date;
-    let data = (await displayData()).filteredFlights;
-    let coordinates = [];
+async function searchByCountry(lamin, lamax, longmin, longmax) {
+    // Wywołanie displayData raz, wynik jest przechowywany w zmiennej data
+    let { filteredFlights, date } = await displayData(lamin, lamax, longmin, longmax);
     
-    console.log(country);
-    data.map(flight => {
-        if (flight["originCountry"].trim().toLowerCase() === country) {
-            // console.log(flight);
-            coordinates.push([flight["latitude"], flight["longtitude"]])
-            // console.log(coordinates);
-        }
-    })
+    let coordinates = [];
+    let {lat, long} = avg(lamin, lamax, longmin, longmax);
+    // Zbieranie współrzędnych z filteredFlights
+    filteredFlights.map(flight => {
+        coordinates.push([flight["latitude"], flight["longtitude"]]);
+    });
 
-    createMap(51, 10.45, coordinates);
+    createMap(lat, long, coordinates); // Wywołanie mapy z współrzędnymi
 }
 
 
+// calculate avg coordinates 
+function avg(lamin, lamax, longmin, longmax) {
+    console.log(lamin, lamax, longmin, longmax);
+    lat = (lamin + lamax) / 2;
+    long = (longmin + longmax) / 2;
 
+    return {lat, long};
+}
 
 // create map
-const lat = 51.165691;
-const long = 10.451526;
-let coordinates = [[50, 10], [52, 11]];
-
 function createMap(lat, long, coordinates) {
     let map = L.map('map').setView([lat, long], 5);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
     coordinates.forEach(coordinate => {
-        console.log(coordinates)
         L.marker(coordinate).addTo(map)
         .bindPopup(`Marker na współrzędnych ${coordinate}`)
         .openPopup();
@@ -93,8 +93,6 @@ function createMap(lat, long, coordinates) {
 
 }
 
-// createMap(lat, long, coordinates);
-
 
 
 
@@ -102,7 +100,9 @@ getFlightInfo();
 
 // Refactor code to get it clean
     // searchByCountry() - handle double await together ()
-    // Change: originCountry !== lat, long. 
+    // Change: originCountry !== lat, long.       DONE
+    // Think of a way to change lat/long input
+    // Create tab onMapPoint click() that shows informations
 // Display data in a pleasant way (flight-info + mark on a map)
 // Handle styling
 
