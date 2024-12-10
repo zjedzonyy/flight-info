@@ -16,10 +16,20 @@ function getFlightInfo() {
         const longmax = parseFloat(document.getElementById('longmax').value);
 
         searchByCountry(lamin, lamax, longmin, longmax);
+        hideTable();
+
     });
 }
 
-
+function hideTable() {
+        //show table
+        const table = document.getElementById('flightsTable');
+        if (table.hidden = true) {
+            table.hidden = false;
+        } else if (table.hidden = false) {
+            table.hidden = true;
+        }
+}
 
 // receive all flights info
 async function coverCountry(lamin, lamax, longmin, longmax) {
@@ -131,6 +141,7 @@ function getTopThreeBaroAltitude(arr) {
         .sort((a,b) => b.baroAltitude - a.baroAltitude)
         .slice(0, 3);
 }
+
 
 
 getFlightInfo();
