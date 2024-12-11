@@ -6,7 +6,7 @@ import 'modern-normalize';
 
 
 const url = `https://opensky-network.org/api`;
-
+let map;
 // take data from form and perform API query
 function getFlightInfo() {
     document.getElementById('country-form').addEventListener('submit', (event) => {
@@ -136,7 +136,6 @@ async function searchByCountry(lamin, lamax, longmin, longmax) {
     filteredFlights.map(flight => {
         coordinates.push([flight["latitude"], flight["longtitude"]]);
     });
-
     createMap(lat, long, coordinates); // Wywołanie mapy z współrzędnymi
 
     console.log(getTopThreeVelocity(filteredFlights));
@@ -177,25 +176,28 @@ function renderTable(data) {
         tableBody.appendChild(row);
     });
 }
-let map;
+
+
 // render map
 function createMap(lat, long, coordinates) {
-    if (!map) {
-        let map = L.map('map').setView([lat, long], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    
-    
-        coordinates.forEach(coordinate => {
-            L.marker(coordinate).addTo(map)
-            .bindPopup(`Marker na współrzędnych ${coordinate}`)
-            .openPopup();
-        });
-    } else {
-        errorMessageElement("Mapa juz jest");
+    // make sure to remove map before intialization
+    let container = L.DomUtil.get('map');
+    if (container != null) {
+        container._leaflet_id = null;
     }
 
+    let map = L.map('map').setView([lat, long], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+
+    coordinates.forEach(coordinate => {
+        L.marker(coordinate).addTo(map)
+        .bindPopup(`Marker na współrzędnych ${coordinate}`)
+        .openPopup();
+    });
 
 }
+
 
 function getTopThreeVelocity(arr) {
     return arr
@@ -218,6 +220,7 @@ function refresh() {
     });
 }
 
+
 getFlightInfo();
 refresh();
 
@@ -231,3 +234,6 @@ refresh();
 // Display data in a pleasant way (flight-info + mark on a map)
 // Handle styling
 
+
+// Handle map is already initialized error
+// Add onClick table row to display pin on map 
