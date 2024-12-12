@@ -17,9 +17,9 @@ function getFlightInfo() {
         const longmin = parseFloat(document.getElementById('longmin').value);
         const longmax = parseFloat(document.getElementById('longmax').value);
 
+        refreshTable();
         searchByCountry(lamin, lamax, longmin, longmax);
         hideTable();
-
     });
 }
 
@@ -102,14 +102,14 @@ async function displayData(lamin, lamax, longmin, longmax) {
     }
     let timestamp = data.time;
     let date = new Date(timestamp * 1000);
-
     let filteredFlights = data.states.map(flight => {
+        console.log(flight[1]);
         return {
-            callsign: flight[1],
+            callsign: flight[1] && flight[1].trim() !== "" ? flight[1] : "No information",
             originCountry: flight[2],
             longtitude: flight[5],
             latitude: flight[6],
-            baroAltitude: flight[7],
+            baroAltitude: !flight[7] ? "-" : flight[7],
             onGround: flight[8],
             velocity: flight[9],
             trueTrack: flight[10],
@@ -138,10 +138,6 @@ async function searchByCountry(lamin, lamax, longmin, longmax) {
     });
     createMap(lat, long, coordinates); // Wywołanie mapy z współrzędnymi
 
-    console.log(getTopThreeVelocity(filteredFlights));
-    console.log(getTopThreeBaroAltitude(filteredFlights));
-
-
     renderTable(filteredFlights);
     $(document).ready(function() {
         $('#flightsTable').DataTable();
@@ -162,6 +158,10 @@ function avg(lamin, lamax, longmin, longmax) {
 function renderTable(data) {
     const tableBody = document.querySelector('#flightsTable tbody');
     tableBody.innerHTML = '';
+    // destroy dataTable if exists
+    if ($.fn.dataTable.isDataTable('#flightsTable')) {
+        $('#flightsTable').DataTable().clear().destroy();
+    }
 
     data.forEach(flight => {
         const row = document.createElement('tr');
@@ -177,6 +177,11 @@ function renderTable(data) {
     });
 }
 
+
+function refreshTable() {
+    const tableBody = document.querySelectorAll('#flightsTable tbody');
+    tableBody.innerHTML = '';
+}
 
 // render map
 function createMap(lat, long, coordinates) {
@@ -225,15 +230,26 @@ getFlightInfo();
 refresh();
 
 // Refactor code to get it clean
-    // searchByCountry() - handle double await together ()
-    // Change: originCountry !== lat, long.       DONE
-    // Think of a way to change lat/long input
-    // Create tab onMapPoint click() that shows informations
-    // Add TOP3 ranking: 1)Velocity 2) Altitude etc....  DONE
-    // DIsplay TOP3 
-// Display data in a pleasant way (flight-info + mark on a map)
 // Handle styling
-
-
-// Handle map is already initialized error
 // Add onClick table row to display pin on map 
+// if callsign empty => display "no information" or smth
+
+// function getCallsign() {
+//     const tr = document.querySelectorAll('#flightsTable tbody tr');
+//     tr.forEach(row => {
+//         row.addEventListener('click', () => {
+//             const tds = row.querySelectorAll('td');
+//             const lat = parseFloat(tds[2].textContent); 
+//             const long = parseFloat(tds[3].textContent);
+//             const coordinates = [lat, long];
+//             console.log(coordinates)
+//             showOnMap(coordinates);
+//             return coordinates;
+//         })
+//     })
+// }
+
+// function showOnMap(coordinates) {
+//     let map = document.getElementById('map');
+//     map.addLayer(L.marker(coordinates));
+// }
